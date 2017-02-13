@@ -1,0 +1,26 @@
+.root{
+	  -fx-background-color:
+    linear-gradient(#c0c0c0 0%, #daa520 25%, #daa520 75%, #c0c0c0 100%),
+    linear-gradient(#800000 0%, #daa520 25%, #daa520 75%, #800000 100%);
+    
+    -fx-background-insets: 0,1;
+    -fx-background-radius: 9,8;
+	-fx-font: 16px "Serif";
+	-fx-text-fill: black;
+	-fx-focus-color: #daa520;
+	/*-fx-background-image: url ("db/Frame.png");*/
+}
+
+.button {
+    -fx-text-fill: black;
+    -fx-font-family: "Serif";
+    -fx-focus-color: #daa520;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+/*Verhalten bei Mouse over*/
+.button:hover {
+	/*-fx-background-color: #009933;*/
+	 -fx-text-fill: #daa520;
+	 -fx-focus-color: #daa520;
+
+}
