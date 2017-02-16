@@ -1,32 +1,27 @@
 package tools;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public abstract class ConnectionHelper {
 	protected Connection connection;
-	protected Statement statement;
+	protected PreparedStatement prepStatement;
 	protected ResultSet resultset;
-	
+
 	protected void getConnection() {
-		try {
-			connection = DBconnection.INSTANCE.getConnection();
-			resultset = DBconnection.INSTANCE.getResultset();
-			statement = DBconnection.INSTANCE.getStatement();
-		} catch (Exception e) {
-				e.printStackTrace();
-		}
-	}
-	
-	protected void updateConnection() {
-		DBconnection.INSTANCE.refreshConnection();
 		connection = DBconnection.INSTANCE.getConnection();
+		prepStatement = DBconnection.INSTANCE.getPrepStatement();
 		resultset = DBconnection.INSTANCE.getResultset();
 	}
-	
-	protected boolean first(){
+
+	protected void updateConnection() {
+		DBconnection.INSTANCE.refreshConnection();
+		getConnection();
+	}
+
+	protected boolean first() {
 		try {
 			if (!resultset.isClosed()) {
 				resultset.first();
@@ -40,8 +35,8 @@ public abstract class ConnectionHelper {
 		}
 		return false;
 	}
-	
-	protected boolean last(){
+
+	protected boolean last() {
 		try {
 			if (!resultset.isClosed()) {
 				resultset.last();
@@ -55,12 +50,16 @@ public abstract class ConnectionHelper {
 		}
 		return false;
 	}
-	
-	protected boolean oneForward(){
+
+	protected boolean oneForward() {
 		try {
 			if (!resultset.isClosed()) {
-				if (resultset.next())
+
+				if (resultset.next()) {
+					if (resultset.isBeforeFirst())
+						resultset.first();
 					return true;
+				}
 			} else {
 				updateConnection();
 				oneForward();
@@ -70,12 +69,16 @@ public abstract class ConnectionHelper {
 		}
 		return false;
 	}
-	
-	protected boolean oneBackward(){
+
+	protected boolean oneBackward() {
 		try {
 			if (!resultset.isClosed()) {
-				if (resultset.previous())
+				if (resultset.previous()) {
+					if (resultset.isBeforeFirst())
+						resultset.first();
+					System.out.println(resultset.getRow());
 					return true;
+				}
 			} else {
 				updateConnection();
 				oneBackward();

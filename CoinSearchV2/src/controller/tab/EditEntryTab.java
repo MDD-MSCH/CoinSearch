@@ -1,6 +1,5 @@
 package controller.tab;
 
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javafx.fxml.FXML;
@@ -9,8 +8,8 @@ import javafx.scene.control.TextField;
 import tools.ConnectionHelper;
 import tools.DBconnection;
 
-public class EditEntryTab extends ConnectionHelper {
-	private String query;
+public class EditEntryTab extends ConnectionHelper{
+	
 
 	@FXML
 	private Label id, wertLabel, waehrungLabel, jahrLabel, inschriftKopfLabel, inschriftZahlLabel, zustandLabel,
@@ -20,7 +19,6 @@ public class EditEntryTab extends ConnectionHelper {
 
 	@FXML
 	public void initialize() {
-		query = "SELECT * FROM coins.muenzen";
 		getConnection();
 		try {
 			if (resultset.next()) {
@@ -49,14 +47,14 @@ public class EditEntryTab extends ConnectionHelper {
 
 	@FXML
 	private void save() {
-		query = "UPDATE muenzen SET wert = '" + wert.getText() + "', waehrung = '" + waehrung.getText() + "', jahr = '"
-				+ jahr.getText() + "', inschriftKopf = '" + inschriftKopf.getText() + "', inschriftZahl = '"
-				+ inschriftZahl.getText() + "', zustand = '" + zustand.getText() + "', praegeort = '"
-				+ praegeort.getText() + "' WHERE id = '" + id.getText() + "'";
+		String query = "UPDATE muenzen SET wert = '" + wert.getText() + "', waehrung = '" + waehrung.getText() 
+				+ "', jahr = '"+ jahr.getText() + "', inschriftKopf = '" + inschriftKopf.getText() 
+				+ "', inschriftZahl = '"+ inschriftZahl.getText() + "', zustand = '" + zustand.getText() 
+				+ "', praegeort = '"+ praegeort.getText() + "' WHERE id = '" + id.getText() + "'";
 		try {
 			int position;
 			position = resultset.getRow();
-			PreparedStatement prepStatement = connection.prepareStatement(query);
+			prepStatement = connection.prepareStatement(query);
 			prepStatement.executeQuery();
 			DBconnection.INSTANCE.refreshConnection();
 			getConnection();
@@ -71,11 +69,11 @@ public class EditEntryTab extends ConnectionHelper {
 
 	@FXML
 	private void delete() {
-		query = "DELETE FROM muenzen WHERE id = '" + id.getText() + "'";
+		String query = "DELETE FROM muenzen WHERE id = '" + id.getText() + "'";
 		try {
 			int position;
 			position = resultset.getRow();
-			PreparedStatement prepStatement = connection.prepareStatement(query);
+			prepStatement = connection.prepareStatement(query);
 			prepStatement.executeQuery();
 			DBconnection.INSTANCE.refreshConnection();
 			getConnection();
@@ -87,32 +85,31 @@ public class EditEntryTab extends ConnectionHelper {
 			JOptionPane.showMessageDialog(null, "Problem by deleting: \n" + e.toString());
 		}
 	}
-
+	
 	@FXML
 	private void ganzVor() {
-		if (first()) {
+		if(first()){
 			readData();
-		}
+		}	
 	}
 
 	@FXML
 	private void ganzZurueck() {
-		if (last()) {
+		if(last()){
 			readData();
-		}
+		}		
 	}
 
 	@FXML
 	private void einenVor() {
-		if (oneForward()) {
+		if(oneForward()){
 			readData();
 		}
-
 	}
 
 	@FXML
 	private void einenZurueck() {
-		if (oneBackward()) {
+		if(oneBackward()){
 			readData();
 		}
 	}
