@@ -12,20 +12,17 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import tools.ConnectionHelper;
 import tools.DBconnection;
 
 
-public class SearchTab {
+public class SearchTab extends ConnectionHelper{
 	private static final long serialVersionUID = -5140210296788483971L;
 	private static String url, wertLabel, wertWaehrung, wertJahr, wertInschriftKopf, wertInschriftZahl, wertZustand, wertPraegeort;
 	
-	private Connection verbindung;
-	private ResultSet ergebnisMenge;
+	
 	private byte countValues;
 	private boolean urlSelected;
-	private String query;
-	//private Stage stage;
-	
 	
 	ObservableList<String> list = FXCollections.observableArrayList("baldwin.co.uk","coins.ha.com","mdm.de");
 	
@@ -38,44 +35,6 @@ public class SearchTab {
 	@FXML
 	private CheckBox checkWert, checkWaehrung, checkJahr, checkInschriftKopf, checkInschriftZahl, checkZustand, checkPraegeort;
 	
-	
-	@FXML 
-	public void initialize() {
-		chooseURL.setItems(list);
-		createConnection();
-	}
-	
-	
-	private void createConnection() {
-		query = "SELECT * FROM coins.muenzen";
-		try {
-			verbindung = DBconnection.INSTANCE.getConnection();
-			ergebnisMenge = DBconnection.INSTANCE.getResultset();
-			if (ergebnisMenge.next()) {
-					datenLesen();
-			}
-			
-		} catch (Exception e) {
-				e.printStackTrace();
-		}
-	}
-	
-	private void datenLesen() {
-		try {
-			id.setText(Integer.toString(ergebnisMenge.getInt(1)));
-			wert.setText(ergebnisMenge.getString(2));
-			waehrung.setText(ergebnisMenge.getString(3));
-			jahr.setText(Integer.toString(ergebnisMenge.getInt(4)));
-			inschriftKopf.setText(ergebnisMenge.getString(5));
-			inschriftZahl.setText(ergebnisMenge.getString(6));
-			zustand.setText(ergebnisMenge.getString(7));
-			praegeort.setText(ergebnisMenge.getString(8));
-		}
-		catch(Exception e) {
-			//JOptionPane.showMessageDialog(this, "Problem: \n" + e.toString());
-			e.printStackTrace();
-		}
-	}
 	
 	public static String getUrl() {
 		String value = url;
@@ -109,75 +68,69 @@ public class SearchTab {
 		String value = wertPraegeort;
 		return value;
 	}
-
-	@FXML
-	private void ganzVor() {
+	@FXML 
+	public void initialize() {
+		chooseURL.setItems(list);
+		getConnection();
 		try {
-			if (!ergebnisMenge.isClosed()) {
-				ergebnisMenge.first();
-				datenLesen();
-			} else {
-				updateConnection();
-				ganzVor();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@FXML
-	private void ganzZurueck() {
-		try {
-			if (!ergebnisMenge.isClosed()) {
-				ergebnisMenge.last();
-				datenLesen();
-			} else {
-				updateConnection();
-				ganzZurueck();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@FXML
-	private void einenVor() {
-		try {
-			if (!ergebnisMenge.isClosed()) {
-				if (ergebnisMenge.next())
-					datenLesen();
-			} else {
-				updateConnection();
-				einenVor();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@FXML
-	private void einenZurueck() {
-		try {
-			if (!ergebnisMenge.isClosed()) {
-				if (ergebnisMenge.previous())
-					datenLesen();
-			} else {
-				updateConnection();
-				einenZurueck();
+			if (resultset.next()) {
+				readData();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	private void updateConnection() {
-		DBconnection.INSTANCE.refreshConnection();
-		verbindung = DBconnection.INSTANCE.getConnection();
-		ergebnisMenge = DBconnection.INSTANCE.getResultset();
+	private void readData() {
+		try {
+			id.setText(Integer.toString(resultset.getInt(1)));
+			wert.setText(resultset.getString(2));
+			waehrung.setText(resultset.getString(3));
+			jahr.setText(Integer.toString(resultset.getInt(4)));
+			inschriftKopf.setText(resultset.getString(5));
+			inschriftZahl.setText(resultset.getString(6));
+			zustand.setText(resultset.getString(7));
+			praegeort.setText(resultset.getString(8));
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+
+	@FXML
+	private void ganzVor() {
+		if(first()){
+			readData();
+		}	
 	}
 
 	@FXML
-	private void startSearching(ActionEvent event) throws SQLException{
+	private void ganzZurueck() {
+		if(last()){
+			readData();
+		}		
+	}
+
+	@FXML
+	private void einenVor() {
+		if (oneForward()) {
+			readData();
+		}
+	}
+
+	@FXML
+	private void einenZurueck() {
+		if (oneBackward()) {
+			readData();
+		}
+	}
+	
+	
+
+	@FXML
+	private void startSearching(ActionEvent event){
 		urlSelected = false;
 		countValues = 0;
 		try {
@@ -197,7 +150,8 @@ public class SearchTab {
 		}
 	}
 	
-	private void checkValues() throws SQLException{
+	private void checkValues(){
+		try{
 		checkWert();
 		checkWaehrung();
 		checkJahr();
@@ -206,53 +160,56 @@ public class SearchTab {
 		checkZustand();
 		checkPraegeort();
 		myURL();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
 	}
 	
 	private void checkWert() throws SQLException{
 		if(checkWert.isSelected()==true){
-			wertLabel = ergebnisMenge.getString(2);
+			wertLabel = resultset.getString(2);
 			countValues++;
 		}else 
 			wertLabel = null;		
 	}
 	private void checkWaehrung() throws SQLException{
 		if(checkWaehrung.isSelected()==true){
-			wertWaehrung = ergebnisMenge.getString(3);
+			wertWaehrung = resultset.getString(3);
 			countValues++;
 		}else
 			wertWaehrung = null;
 	}
 	private void checkJahr() throws SQLException{
 		if( checkJahr.isSelected()==true){
-			wertJahr = ergebnisMenge.getString(4);
+			wertJahr = resultset.getString(4);
 			countValues++;
 		}else
 			wertJahr = null;
 	}
 	private void checkInschriftKopf() throws SQLException{
 		if(checkInschriftKopf.isSelected()==true){
-			wertInschriftKopf = ergebnisMenge.getString(5);
+			wertInschriftKopf = resultset.getString(5);
 			countValues++;
 		}else
 			wertInschriftKopf = null;
 	}
 	private void checkInschriftZahl() throws SQLException{
 		if(checkInschriftZahl.isSelected()==true){
-			wertInschriftZahl = ergebnisMenge.getString(6);
+			wertInschriftZahl = resultset.getString(6);
 			countValues++;
 		}else
 			wertInschriftZahl = null;
 	}
 	private void checkZustand() throws SQLException{
 		if(checkZustand.isSelected()==true){
-			wertZustand = ergebnisMenge.getString(7);
+			wertZustand = resultset.getString(7);
 			countValues++;
 		}else
 			wertZustand = null;
 	}
 	private void checkPraegeort() throws SQLException{
 		if(checkPraegeort.isSelected()==true){
-			wertPraegeort = ergebnisMenge.getString(8);
+			wertPraegeort = resultset.getString(8);
 			countValues++;
 		}else
 			wertPraegeort = null;

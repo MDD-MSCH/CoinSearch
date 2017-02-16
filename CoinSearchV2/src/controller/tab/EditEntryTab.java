@@ -1,21 +1,15 @@
 package controller.tab;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-
 import javax.swing.JOptionPane;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import tools.ConnectionHelper;
 import tools.DBconnection;
 
-public class EditEntryTab {
-	private Connection verbindung;
-	private Statement statement;
-	private ResultSet ergebnisMenge;
+public class EditEntryTab extends ConnectionHelper {
 	private String query;
 
 	@FXML
@@ -28,40 +22,50 @@ public class EditEntryTab {
 	public void initialize() {
 		query = "SELECT * FROM coins.muenzen";
 		getConnection();
-	}
-
-	private void getConnection() {
 		try {
-			verbindung = DBconnection.INSTANCE.getConnection();
-			ergebnisMenge = DBconnection.INSTANCE.getResultset();
-			statement = verbindung.createStatement();
-			if (ergebnisMenge.next()) {
-				datenLesen();
+			if (resultset.next()) {
+				readData();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void updateConnection() {
-		DBconnection.INSTANCE.refreshConnection();
-		verbindung = DBconnection.INSTANCE.getConnection();
-		ergebnisMenge = DBconnection.INSTANCE.getResultset();
-	}
-
-	private void datenLesen() {
+	private void readData() {
 		try {
-			id.setText(Integer.toString(ergebnisMenge.getInt(1)));
-			wert.setText(ergebnisMenge.getString(2));
-			waehrung.setText(ergebnisMenge.getString(3));
-			jahr.setText(Integer.toString(ergebnisMenge.getInt(4)));
-			inschriftKopf.setText(ergebnisMenge.getString(5));
-			inschriftZahl.setText(ergebnisMenge.getString(6));
-			zustand.setText(ergebnisMenge.getString(7));
-			praegeort.setText(ergebnisMenge.getString(8));
+			id.setText(Integer.toString(resultset.getInt(1)));
+			wert.setText(resultset.getString(2));
+			waehrung.setText(resultset.getString(3));
+			jahr.setText(Integer.toString(resultset.getInt(4)));
+			inschriftKopf.setText(resultset.getString(5));
+			inschriftZahl.setText(resultset.getString(6));
+			zustand.setText(resultset.getString(7));
+			praegeort.setText(resultset.getString(8));
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, "Problem by reading: \n" + e.toString());
 			e.printStackTrace();
+		}
+	}
+
+	@FXML
+	private void save() {
+		query = "UPDATE muenzen SET wert = '" + wert.getText() + "', waehrung = '" + waehrung.getText() + "', jahr = '"
+				+ jahr.getText() + "', inschriftKopf = '" + inschriftKopf.getText() + "', inschriftZahl = '"
+				+ inschriftZahl.getText() + "', zustand = '" + zustand.getText() + "', praegeort = '"
+				+ praegeort.getText() + "' WHERE id = '" + id.getText() + "'";
+		try {
+			int position;
+			position = resultset.getRow();
+			PreparedStatement prepStatement = connection.prepareStatement(query);
+			prepStatement.executeQuery();
+			DBconnection.INSTANCE.refreshConnection();
+			getConnection();
+			resultset.absolute(position);
+			if (resultset.isAfterLast())
+				resultset.last();
+			readData();
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Problem by saving: \n" + e.toString());
 		}
 	}
 
@@ -70,99 +74,46 @@ public class EditEntryTab {
 		query = "DELETE FROM muenzen WHERE id = '" + id.getText() + "'";
 		try {
 			int position;
-			position = ergebnisMenge.getRow();
-			PreparedStatement prepStatement = verbindung.prepareStatement(query);
+			position = resultset.getRow();
+			PreparedStatement prepStatement = connection.prepareStatement(query);
 			prepStatement.executeQuery();
 			DBconnection.INSTANCE.refreshConnection();
 			getConnection();
-			ergebnisMenge.absolute(position);
-			if (ergebnisMenge.isAfterLast())
-				ergebnisMenge.last();
-			datenLesen();
+			resultset.absolute(position);
+			if (resultset.isAfterLast())
+				resultset.last();
+			readData();
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, "Problem by deleting: \n" + e.toString());
 		}
 	}
 
 	@FXML
-	private void save() {
-		query = "UPDATE muenzen SET wert = '" + wert.getText() + "', waehrung = '" + waehrung.getText() 
-				+ "', jahr = '"+ jahr.getText() + "', inschriftKopf = '" + inschriftKopf.getText() 
-				+ "', inschriftZahl = '"+ inschriftZahl.getText() + "', zustand = '" + zustand.getText() 
-				+ "', praegeort = '"+ praegeort.getText() + "' WHERE id = '" + id.getText() + "'";
-		try {
-			int position;
-			position = ergebnisMenge.getRow();
-			PreparedStatement prepStatement = verbindung.prepareStatement(query);
-			prepStatement.executeQuery();
-			DBconnection.INSTANCE.refreshConnection();
-			getConnection();
-			ergebnisMenge.absolute(position);
-			if (ergebnisMenge.isAfterLast())
-				ergebnisMenge.last();
-			datenLesen();
-		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, "Problem by saving: \n" + e.toString());
-		}
-	}
-
-	@FXML
 	private void ganzVor() {
-		try {
-			if (!ergebnisMenge.isClosed()) {
-				ergebnisMenge.first();
-				datenLesen();
-			} else {
-				updateConnection();
-				ganzVor();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+		if (first()) {
+			readData();
 		}
 	}
 
 	@FXML
 	private void ganzZurueck() {
-		try {
-			if (!ergebnisMenge.isClosed()) {
-				ergebnisMenge.last();
-				datenLesen();
-			} else {
-				updateConnection();
-				ganzZurueck();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+		if (last()) {
+			readData();
 		}
 	}
 
 	@FXML
 	private void einenVor() {
-		try {
-			if (!ergebnisMenge.isClosed()) {
-				if (ergebnisMenge.next())
-					datenLesen();
-			} else {
-				updateConnection();
-				einenVor();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+		if (oneForward()) {
+			readData();
 		}
+
 	}
 
 	@FXML
 	private void einenZurueck() {
-		try {
-			if (!ergebnisMenge.isClosed()) {
-				if (ergebnisMenge.previous())
-					datenLesen();
-			} else {
-				updateConnection();
-				einenZurueck();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+		if (oneBackward()) {
+			readData();
 		}
 	}
 }
