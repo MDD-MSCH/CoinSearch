@@ -33,10 +33,10 @@ public class Tab1Controller implements Runnable{
 	//public MainController main;
 	private WebDriver foxdriver;
 	private WebDriverWait wait;
-	private static String keywords;
-	public String text, readString;
-	//private BufferedReader bfrd;
-		
+	private String keywords;
+	public String text, c;
+	
+			
 	@FXML
 	public TextArea texts;	
 	
@@ -46,9 +46,9 @@ public class Tab1Controller implements Runnable{
 	@FXML
 	public void sendText(){
 		System.out.println(text);
-		try (Reader bfrd = new BufferedReader(new InputStreamReader(new FileInputStream("temp1.txt"), "UTF-8"))){
-			while ((readString= bfrd.read()) != null) {
-				texts.appendText(readString+"\n");
+		try (BufferedReader bfrd = new BufferedReader(new InputStreamReader(new FileInputStream("temp1.txt"), "UTF-8"))){
+			while ((c = bfrd.readLine()) != null) {
+				texts.appendText(c+"\n");
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -63,9 +63,8 @@ public class Tab1Controller implements Runnable{
 		main = mainController;
 		
 	}	*/
-	
-		
-	public static String getKeywords() {
+			
+	public String getKeywords() {
 		return keywords;
 	}
 	
@@ -93,9 +92,9 @@ public class Tab1Controller implements Runnable{
 			foxdriver.get("http://www.baldwin.co.uk/coins.html?limit=all");
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input.dropdown.dd-all")));
 			url = "http://www.baldwin.co.uk/coins.html?limit=all";
-			}else if(SearchTab.getUrl().equals("coins.ha.com")){ //http://www.impressionlink.com/support/
-			foxdriver.get("http://www.impressionlink.com/support/");	//http://www.coins.ha.com
-			url = "http://www.impressionlink.com/support/"; //http://www.coins.ha.com
+			}else if(SearchTab.getUrl().equals("coins.ha.com")){ 
+			foxdriver.get("http://www.coins.ha.com");
+			url = "http://www.coins.ha.com";
 			}
 //			list1 = new LinkGetter().getLinks(url);
 //			System.out.println( list1 );   

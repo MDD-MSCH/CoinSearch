@@ -1,10 +1,8 @@
 package controller.tab;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
+
 import java.sql.SQLException;
 
-import application.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,14 +11,10 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import tools.ConnectionHelper;
-import tools.DBconnection;
 
 
 public class SearchTab extends ConnectionHelper{
-	private static final long serialVersionUID = -5140210296788483971L;
 	private static String url, wertLabel, wertWaehrung, wertJahr, wertInschriftKopf, wertInschriftZahl, wertZustand, wertPraegeort;
-	
-	
 	private byte countValues;
 	private boolean urlSelected;
 	
@@ -40,7 +34,7 @@ public class SearchTab extends ConnectionHelper{
 		String value = url;
 		return value;
 	}
-	public static String getCheckWert() {
+	public static  String getCheckWert() {
 		String value = wertLabel;
 		return value;
 	}
@@ -97,8 +91,6 @@ public class SearchTab extends ConnectionHelper{
 		}
 	}
 	
-	
-
 	@FXML
 	private void ganzVor() {
 		if(first()){
@@ -127,8 +119,6 @@ public class SearchTab extends ConnectionHelper{
 		}
 	}
 	
-	
-
 	@FXML
 	private void startSearching(ActionEvent event){
 		urlSelected = false;
