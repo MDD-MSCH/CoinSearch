@@ -56,9 +56,10 @@ public abstract class ConnectionHelper {
 			if (!resultset.isClosed()) {
 
 				if (resultset.next()) {
-					if (resultset.isBeforeFirst())
-						resultset.first();
 					return true;
+				}
+				if (resultset.isAfterLast()) {
+					resultset.last();
 				}
 			} else {
 				updateConnection();
@@ -74,10 +75,10 @@ public abstract class ConnectionHelper {
 		try {
 			if (!resultset.isClosed()) {
 				if (resultset.previous()) {
-					if (resultset.isBeforeFirst())
-						resultset.first();
-					System.out.println(resultset.getRow());
 					return true;
+				}
+				if (resultset.isBeforeFirst()) {
+					resultset.first();
 				}
 			} else {
 				updateConnection();

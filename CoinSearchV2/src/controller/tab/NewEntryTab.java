@@ -28,7 +28,7 @@ public class NewEntryTab extends ConnectionHelper{
 		List<String> eingabe = Arrays.asList(wert.getText(), waehrung.getText(), jahr.getText(),
 				inschriftKopf.getText(), inschriftZahl.getText(), zustand.getText(), praegeort.getText());
 		if (eingabe != null) {
-			if (check.checkIfStringIsNotEmpty(eingabe) == eingabe.size() && checkEingabe()) {
+			if (check.checkIfStringIsNotEmpty(eingabe) == eingabe.size() && checkInput()) {
 
 				try {
 					getConnection();
@@ -58,7 +58,7 @@ public class NewEntryTab extends ConnectionHelper{
 		}
 	}
 
-	private boolean checkEingabe() {
+	private boolean checkInput() {
 		boolean readyForExecute = false;
 
 		if (!check.onlyNumbers(jahr.getText())) {

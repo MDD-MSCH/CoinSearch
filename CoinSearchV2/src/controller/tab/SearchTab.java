@@ -68,14 +68,14 @@ public class SearchTab extends ConnectionHelper{
 		getConnection();
 		try {
 			if (resultset.next()) {
-				readData();
+				setData();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	private void readData() {
+	private void setData() {
 		try {
 			id.setText(Integer.toString(resultset.getInt(1)));
 			wert.setText(resultset.getString(2));
@@ -94,28 +94,28 @@ public class SearchTab extends ConnectionHelper{
 	@FXML
 	private void ganzVor() {
 		if(first()){
-			readData();
+			setData();
 		}	
 	}
 
 	@FXML
 	private void ganzZurueck() {
 		if(last()){
-			readData();
+			setData();
 		}		
 	}
 
 	@FXML
 	private void einenVor() {
 		if (oneForward()) {
-			readData();
+			setData();
 		}
 	}
 
 	@FXML
 	private void einenZurueck() {
 		if (oneBackward()) {
-			readData();
+			setData();
 		}
 	}
 	
