@@ -19,14 +19,14 @@
       <Label fx:id="inschriftZahlLabel" layoutX="160.0" layoutY="340.0" text="Inscription number:" />
       <Label fx:id="zustandLabel" layoutX="160.0" layoutY="380.0" text="Situation:" />
       <Label fx:id="praegeortLabel" layoutX="160.0" layoutY="420.0" text="Minting:" />
-      <Label fx:id="hintLabel" layoutX="161.0" layoutY="500.0" />
-      <TextField fx:id="wert" layoutX="390.0" layoutY="180.0" prefHeight="20.0" prefWidth="110.0" />
-      <TextField fx:id="waehrung" layoutX="390.0" layoutY="220.0" prefHeight="20.0" prefWidth="110.0" />
-      <TextField fx:id="jahr" layoutX="390.0" layoutY="260.0" prefHeight="20.0" prefWidth="110.0" />
-      <TextField fx:id="inschriftKopf" layoutX="390.0" layoutY="300.0" prefHeight="20.0" prefWidth="110.0" />
-      <TextField fx:id="inschriftZahl" layoutX="390.0" layoutY="340.0" prefHeight="20.0" prefWidth="110.0" />
-      <TextField fx:id="zustand" layoutX="390.0" layoutY="380.0" prefHeight="20.0" prefWidth="110.0" />
-      <TextField fx:id="praegeort" layoutX="390.0" layoutY="420.0" prefHeight="20.0" prefWidth="110.0" />
+      <Label fx:id="hintLabel" layoutX="163.0" layoutY="455.0" prefHeight="20.0" prefWidth="250.0" />
+      <TextField fx:id="wert" layoutX="390.0" layoutY="180.0" prefHeight="20.0" prefWidth="120.0" />
+      <TextField fx:id="waehrung" layoutX="390.0" layoutY="220.0" prefHeight="20.0" prefWidth="120.0" />
+      <TextField fx:id="jahr" layoutX="390.0" layoutY="260.0" prefHeight="20.0" prefWidth="120.0" />
+      <TextField fx:id="inschriftKopf" layoutX="390.0" layoutY="300.0" prefHeight="20.0" prefWidth="120.0" />
+      <TextField fx:id="inschriftZahl" layoutX="390.0" layoutY="340.0" prefHeight="20.0" prefWidth="120.0" />
+      <TextField fx:id="zustand" layoutX="390.0" layoutY="380.0" prefHeight="20.0" prefWidth="120.0" />
+      <TextField fx:id="praegeort" layoutX="390.0" layoutY="420.0" prefHeight="20.0" prefWidth="120.0" />
       <ToolBar layoutX="232.0" layoutY="489.0" prefHeight="40.0" prefWidth="125.0">
         <items>
             <Button mnemonicParsing="false" onAction="#uebernehmen" text="Save" />

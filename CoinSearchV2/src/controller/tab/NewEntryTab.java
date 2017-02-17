@@ -32,7 +32,6 @@ public class NewEntryTab extends ConnectionHelper{
 
 				try {
 					getConnection();
-					// findLastIdkey();
 					String query = " insert into muenzen (wert, waehrung, jahr, inschriftKopf, inschriftZahl, zustand, praegeort)"
 							+ " values (?, ?, ?, ?, ?, ?, ?)";
 					prepStatement = connection.prepareStatement(query);
@@ -52,23 +51,23 @@ public class NewEntryTab extends ConnectionHelper{
 					e.printStackTrace();
 				}
 			} else {
-				System.out.println("Please fill all fields correctly");
+				hintLabel.setText("Please fill up all fields correctly.");
 			}
 		} else {
-			System.out.println("Please fill all fields correctly");
+			hintLabel.setText("Please fill up all fields correctly."); 
 		}
 	}
 
 	private boolean checkEingabe() {
 		boolean readyForExecute = false;
 
-		if (check.onlyNumbers(jahr.getText()) == false) {
-			jahr.setText("Only Numbers Please");
+		if (!check.onlyNumbers(jahr.getText())) {
+			jahr.setText("Only Numbers!");
 		}
-		if (check.onlyLetters(praegeort.getText()) == false) {
-			praegeort.setText("Only Letters Please");
+		if (!check.onlyLetters(praegeort.getText())) {
+			praegeort.setText("Only Letters!");
 		}
-		if (check.onlyNumbers(jahr.getText()) == true && check.onlyLetters(praegeort.getText()) == true) {
+		if (check.onlyNumbers(jahr.getText()) && check.onlyLetters(praegeort.getText())) {
 			readyForExecute = true;
 		}
 		return readyForExecute;
@@ -82,6 +81,7 @@ public class NewEntryTab extends ConnectionHelper{
 		inschriftZahl.setText(null);
 		zustand.setText(null);
 		praegeort.setText(null);
+		hintLabel.setText(null);
 	}
 
 	@FXML

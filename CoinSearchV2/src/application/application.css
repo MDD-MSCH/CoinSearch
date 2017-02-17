@@ -8,7 +8,6 @@
 	-fx-font: 16px "Serif";
 	-fx-text-fill: black;
 	-fx-focus-color: #daa520;
-	/*-fx-background-image: url ("db/Frame.png");*/
 }
 
 .button {
@@ -17,10 +16,8 @@
     -fx-focus-color: #daa520;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
 }
-/*Verhalten bei Mouse over*/
+
 .button:hover {
-	/*-fx-background-color: #009933;*/
 	 -fx-text-fill: #daa520;
 	 -fx-focus-color: #daa520;
-
 }
