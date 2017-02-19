@@ -5,11 +5,24 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+
 public abstract class ConnectionHelper {
+	protected Alert errorAlert = new Alert(AlertType.ERROR);
 	protected Connection connection;
 	protected PreparedStatement prepStatement;
 	protected ResultSet resultset;
+	protected ObservableList<String> conservationLevelsList = FXCollections.observableArrayList("GE", "G", "SG", "S", "S-SS", "SS", "SS-VZ", "VZ", "VZ-ST", "ST");
+	
 
+	protected void initAlert(){
+		errorAlert.setTitle("Error Message");
+		errorAlert.setHeaderText("Exception Alert");
+	}
+	
 	protected void getConnection() {
 		connection = DBconnection.INSTANCE.getConnection();
 		prepStatement = DBconnection.INSTANCE.getPrepStatement();
@@ -31,7 +44,8 @@ public abstract class ConnectionHelper {
 				first();
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			errorAlert.setContentText("Problem by scrolling through the ResultSet: \n" + e.toString());
+			errorAlert.show();
 		}
 		return false;
 	}
@@ -46,7 +60,8 @@ public abstract class ConnectionHelper {
 				last();
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			errorAlert.setContentText("Problem by scrolling through the ResultSet: \n" + e.toString());
+			errorAlert.show();
 		}
 		return false;
 	}
@@ -66,7 +81,8 @@ public abstract class ConnectionHelper {
 				oneForward();
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			errorAlert.setContentText("Problem by scrolling through the ResultSet: \n" + e.toString());
+			errorAlert.show();
 		}
 		return false;
 	}
@@ -85,7 +101,8 @@ public abstract class ConnectionHelper {
 				oneBackward();
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			errorAlert.setContentText("Problem by scrolling through the ResultSet: \n" + e.toString());
+			errorAlert.show();
 		}
 		return false;
 	}

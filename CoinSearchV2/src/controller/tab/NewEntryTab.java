@@ -4,8 +4,8 @@ package controller.tab;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
-import javax.swing.JOptionPane;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import tools.ConnectionHelper;
@@ -13,25 +13,32 @@ import tools.DBconnection;
 import tools.checkTextField;
 
 public class NewEntryTab extends ConnectionHelper{
-	
 	private checkTextField check;
-
+	
 	@FXML
 	private Label id, wertLabel, waehrungLabel, jahrLabel, inschriftKopfLabel, inschriftZahlLabel, zustandLabel,
 			praegeortLabel, hintLabel;
 	@FXML
-	private TextField wert, waehrung, jahr, inschriftKopf, inschriftZahl, zustand, praegeort;
-
+	private TextField wert, waehrung, jahr, inschriftKopf, inschriftZahl,  praegeort;
+	
+	@FXML
+	private ComboBox<String> zustand;
+	
+	@FXML
+	public void initialize() {
+		zustand.setItems(conservationLevelsList);
+		initAlert();
+		getConnection();
+	}
+	
 	@FXML
 	private void uebernehmen() {
 		check = new checkTextField();
-		List<String> eingabe = Arrays.asList(wert.getText(), waehrung.getText(), jahr.getText(),
-				inschriftKopf.getText(), inschriftZahl.getText(), zustand.getText(), praegeort.getText());
-		if (eingabe != null) {
-			if (check.checkIfStringIsNotEmpty(eingabe) == eingabe.size() && checkInput()) {
-
+		List<String> inputList = Arrays.asList(wert.getText(), waehrung.getText(), jahr.getText(),
+				inschriftKopf.getText(), inschriftZahl.getText(), zustand.getValue(), praegeort.getText());
+		if (inputList != null) {
+			if (check.checkIfStringIsNotEmpty(inputList) == inputList.size() && checkInput()) {
 				try {
-					getConnection();
 					String query = " insert into muenzen (wert, waehrung, jahr, inschriftKopf, inschriftZahl, zustand, praegeort)"
 							+ " values (?, ?, ?, ?, ?, ?, ?)";
 					prepStatement = connection.prepareStatement(query);
@@ -41,14 +48,14 @@ public class NewEntryTab extends ConnectionHelper{
 					prepStatement.setString(3, jahr.getText());
 					prepStatement.setString(4, inschriftKopf.getText());
 					prepStatement.setString(5, inschriftZahl.getText());
-					prepStatement.setString(6, zustand.getText());
+					prepStatement.setString(6, zustand.getValue());
 					prepStatement.setString(7, praegeort.getText());
 					prepStatement.executeQuery();
 					cleanTextFields();
 					DBconnection.INSTANCE.refreshConnection();
 				} catch (SQLException e) {
-					JOptionPane.showMessageDialog(null, "Problem by Saving: \n" + e.toString());
-					e.printStackTrace();
+					errorAlert.setContentText("Problem by Saving: \n" + e.toString());
+					errorAlert.show();
 				}
 			} else {
 				hintLabel.setText("Please fill up all fields correctly.");
@@ -79,7 +86,7 @@ public class NewEntryTab extends ConnectionHelper{
 		jahr.setText(null);
 		inschriftKopf.setText(null);
 		inschriftZahl.setText(null);
-		zustand.setText(null);
+//		zustand.setText(null);
 		praegeort.setText(null);
 		hintLabel.setText(null);
 	}

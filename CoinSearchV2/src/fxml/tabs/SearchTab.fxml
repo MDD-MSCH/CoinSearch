@@ -26,9 +26,9 @@
       <CheckBox fx:id="checkWert" layoutX="130.0" layoutY="180.0" mnemonicParsing="false" text="Value:" />
       <CheckBox fx:id="checkWaehrung" layoutX="130.0" layoutY="220.0" mnemonicParsing="false" text="Currency:" />
       <CheckBox fx:id="checkJahr" layoutX="130.0" layoutY="260.0" mnemonicParsing="false" text="Year:" />
-      <CheckBox fx:id="checkInschriftKopf" layoutX="130.0" layoutY="300.0" mnemonicParsing="false" text="Inscription head:" />
-      <CheckBox fx:id="checkInschriftZahl" layoutX="130.0" layoutY="340.0" mnemonicParsing="false" text="Inscription number:" />
-      <CheckBox fx:id="checkZustand" layoutX="130.0" layoutY="380.0" mnemonicParsing="false" text="Situation:" />
+      <CheckBox fx:id="checkInschriftKopf" layoutX="130.0" layoutY="300.0" mnemonicParsing="false" text="Inscription Avers:" />
+      <CheckBox fx:id="checkInschriftZahl" layoutX="130.0" layoutY="340.0" mnemonicParsing="false" text="Inscription Revers:" />
+      <CheckBox fx:id="checkZustand" layoutX="130.0" layoutY="380.0" mnemonicParsing="false" text="Conservation Level:" />
       <CheckBox fx:id="checkPraegeort" layoutX="130.0" layoutY="420.0" mnemonicParsing="false" text="Minting:" />
 
 

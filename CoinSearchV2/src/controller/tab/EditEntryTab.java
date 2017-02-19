@@ -1,8 +1,8 @@
 package controller.tab;
 
 import java.sql.SQLException;
-import javax.swing.JOptionPane;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import tools.ConnectionHelper;
@@ -15,17 +15,22 @@ public class EditEntryTab extends ConnectionHelper{
 	private Label id, wertLabel, waehrungLabel, jahrLabel, inschriftKopfLabel, inschriftZahlLabel, zustandLabel,
 			praegeortLabel;
 	@FXML
-	private TextField wert, waehrung, jahr, inschriftKopf, inschriftZahl, zustand, praegeort;
+	private TextField wert, waehrung, jahr, inschriftKopf, inschriftZahl, praegeort;
 
 	@FXML
+	private ComboBox<String> zustand;
+	
+	@FXML
 	public void initialize() {
+		zustand.setItems(conservationLevelsList);
 		getConnection();
 		try {
 			if (resultset.next()) {
 				setData();
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			errorAlert.setContentText("Problem by initialising: \n" + e.toString());
+			errorAlert.show();
 		}
 	}
 
@@ -37,11 +42,11 @@ public class EditEntryTab extends ConnectionHelper{
 			jahr.setText(Integer.toString(resultset.getInt(4)));
 			inschriftKopf.setText(resultset.getString(5));
 			inschriftZahl.setText(resultset.getString(6));
-			zustand.setText(resultset.getString(7));
+			zustand.setValue(resultset.getString(7));
 			praegeort.setText(resultset.getString(8));
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, "Problem by reading: \n" + e.toString());
-			e.printStackTrace();
+			errorAlert.setContentText("Problem by reading: \n" + e.toString());
+			errorAlert.show();
 		}
 	}
 
@@ -49,7 +54,7 @@ public class EditEntryTab extends ConnectionHelper{
 	private void save() {
 		String query = "UPDATE muenzen SET wert = '" + wert.getText() + "', waehrung = '" + waehrung.getText() 
 				+ "', jahr = '"+ jahr.getText() + "', inschriftKopf = '" + inschriftKopf.getText() 
-				+ "', inschriftZahl = '"+ inschriftZahl.getText() + "', zustand = '" + zustand.getText() 
+				+ "', inschriftZahl = '"+ inschriftZahl.getText() + "', zustand = '" + zustand.getValue() 
 				+ "', praegeort = '"+ praegeort.getText() + "' WHERE id = '" + id.getText() + "'";
 		try {
 			int position;
@@ -63,7 +68,8 @@ public class EditEntryTab extends ConnectionHelper{
 				resultset.last();
 			setData();
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, "Problem by saving: \n" + e.toString());
+			errorAlert.setContentText("Problem by saving: \n" + e.toString());
+			errorAlert.show();
 		}
 	}
 
@@ -86,7 +92,8 @@ public class EditEntryTab extends ConnectionHelper{
 			}
 			setData();
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, "Problem by deleting: \n" + e.toString());
+			errorAlert.setContentText("Problem by delating: \n" + e.toString());
+			errorAlert.show();
 		}
 	}
 	

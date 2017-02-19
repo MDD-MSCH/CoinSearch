@@ -1,6 +1,5 @@
 package controller.tab;
 
-
 import java.sql.SQLException;
 
 import javafx.collections.FXCollections;
@@ -12,57 +11,24 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import tools.ConnectionHelper;
 
-
-public class SearchTab extends ConnectionHelper{
+public class SearchTab extends ConnectionHelper {
 	private static String url, wertLabel, wertWaehrung, wertJahr, wertInschriftKopf, wertInschriftZahl, wertZustand, wertPraegeort;
 	private byte countValues;
 	private boolean urlSelected;
-	
-	ObservableList<String> list = FXCollections.observableArrayList("baldwin.co.uk","coins.ha.com","mdm.de");
-	
+
+	private ObservableList<String> list = FXCollections.observableArrayList("muenzkatalog-online.de", "baldwin.co.uk", "coins.ha.com", "mdm.de");
+
 	@FXML
 	private Label id, wert, waehrung, jahr, inschriftKopf, inschriftZahl, zustand, praegeort, hint;
-	
+
 	@FXML
 	private ComboBox<String> chooseURL;
-	
+
 	@FXML
-	private CheckBox checkWert, checkWaehrung, checkJahr, checkInschriftKopf, checkInschriftZahl, checkZustand, checkPraegeort;
-	
-	
-	public static String getUrl() {
-		String value = url;
-		return value;
-	}
-	public static  String getCheckWert() {
-		String value = wertLabel;
-		return value;
-	}
-	public static String getCheckWaehrung() {
-		String value = wertWaehrung;
-		return value;
-	}
-	public static String getCheckJahr() {
-		String value = wertJahr;
-		return value;
-	}
-	public static String getCheckInschriftKopf() {
-		String value = wertInschriftKopf;
-		return value;
-	}
-	public static String getCheckInschriftZahl() {
-		String value = wertInschriftZahl;
-		return value;
-	}
-	public static String getCheckZustand() {
-		String value = wertZustand;
-		return value;
-	}
-	public static String getCheckPraegeort() {
-		String value = wertPraegeort;
-		return value;
-	}
-	@FXML 
+	private CheckBox checkWert, checkWaehrung, checkJahr, checkInschriftKopf, checkInschriftZahl, checkZustand,
+			checkPraegeort;
+
+	@FXML
 	public void initialize() {
 		chooseURL.setItems(list);
 		getConnection();
@@ -71,10 +37,51 @@ public class SearchTab extends ConnectionHelper{
 				setData();
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			errorAlert.setContentText("Problem by initialising: \n" + e.toString());
+			errorAlert.show();
 		}
 	}
-	
+
+	public static String getUrl() {
+		String value = url;
+		return value;
+	}
+
+	public static String getCheckWert() {
+		String value = wertLabel;
+		return value;
+	}
+
+	public static String getCheckWaehrung() {
+		String value = wertWaehrung;
+		return value;
+	}
+
+	public static String getCheckJahr() {
+		String value = wertJahr;
+		return value;
+	}
+
+	public static String getCheckInschriftKopf() {
+		String value = wertInschriftKopf;
+		return value;
+	}
+
+	public static String getCheckInschriftZahl() {
+		String value = wertInschriftZahl;
+		return value;
+	}
+
+	public static String getCheckZustand() {
+		String value = wertZustand;
+		return value;
+	}
+
+	public static String getCheckPraegeort() {
+		String value = wertPraegeort;
+		return value;
+	}
+
 	private void setData() {
 		try {
 			id.setText(Integer.toString(resultset.getInt(1)));
@@ -85,24 +92,24 @@ public class SearchTab extends ConnectionHelper{
 			inschriftZahl.setText(resultset.getString(6));
 			zustand.setText(resultset.getString(7));
 			praegeort.setText(resultset.getString(8));
-		}
-		catch(Exception e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			errorAlert.setContentText("Problem by setting data: \n" + e.toString());
+			errorAlert.show();
 		}
 	}
-	
+
 	@FXML
 	private void ganzVor() {
-		if(first()){
+		if (first()) {
 			setData();
-		}	
+		}
 	}
 
 	@FXML
 	private void ganzZurueck() {
-		if(last()){
+		if (last()) {
 			setData();
-		}		
+		}
 	}
 
 	@FXML
@@ -118,101 +125,110 @@ public class SearchTab extends ConnectionHelper{
 			setData();
 		}
 	}
-	
+
 	@FXML
-	private void startSearching(ActionEvent event){
+	private void startSearching(ActionEvent event) {
 		urlSelected = false;
 		countValues = 0;
 		try {
 			checkValues();
-			if (countValues >= 1 && urlSelected == true){
-			Thread workerThread = new Thread(new Tab1Controller());
-			workerThread.start();
-			}else if(countValues == 0 && urlSelected == true){
+			if (countValues >= 1 && urlSelected == true) {
+				Thread workerThread = new Thread(new Tab1Controller());
+				workerThread.start();
+			} else if (countValues == 0 && urlSelected == true) {
 				hint.setText("Please choose a value");
 			}
-		} catch ( java.lang.RuntimeException e) {
-			if (countValues == 0 && urlSelected == false){
-			hint.setText("Please choose a website and at least one value");
-			}else if(countValues >0 && urlSelected == false){
+			if (countValues == 0 && urlSelected == false) {
+				hint.setText("Please choose a website and at least one value");
+			} else if (countValues > 0 && urlSelected == false) {
 				hint.setText("Please choose a website");
 			}
+		} catch (java.lang.RuntimeException e) {
+			errorAlert.setContentText("Problem by start searching: \n" + e.toString());
+			errorAlert.show();
 		}
 	}
-	
-	private void checkValues(){
-		try{
-		checkWert();
-		checkWaehrung();
-		checkJahr();
-		checkInschriftKopf();
-		checkInschriftZahl();
-		checkZustand();
-		checkPraegeort();
-		myURL();
-		}catch(SQLException e){
-			e.printStackTrace();
+
+	private void checkValues() {
+		try {
+			checkWert();
+			checkWaehrung();
+			checkJahr();
+			checkInschriftKopf();
+			checkInschriftZahl();
+			checkZustand();
+			checkPraegeort();
+			myURL();
+		} catch (SQLException e) {
+			errorAlert.setContentText("Problem by checking values: \n" + e.toString());
+			errorAlert.show();
 		}
 	}
-	
-	private void checkWert() throws SQLException{
-		if(checkWert.isSelected()==true){
+
+	private void checkWert() throws SQLException {
+		if (checkWert.isSelected() == true) {
 			wertLabel = resultset.getString(2);
 			countValues++;
-		}else 
-			wertLabel = null;		
+		} else
+			wertLabel = null;
 	}
-	private void checkWaehrung() throws SQLException{
-		if(checkWaehrung.isSelected()==true){
+
+	private void checkWaehrung() throws SQLException {
+		if (checkWaehrung.isSelected() == true) {
 			wertWaehrung = resultset.getString(3);
 			countValues++;
-		}else
+		} else
 			wertWaehrung = null;
 	}
-	private void checkJahr() throws SQLException{
-		if( checkJahr.isSelected()==true){
+
+	private void checkJahr() throws SQLException {
+		if (checkJahr.isSelected() == true) {
 			wertJahr = resultset.getString(4);
 			countValues++;
-		}else
+		} else
 			wertJahr = null;
 	}
-	private void checkInschriftKopf() throws SQLException{
-		if(checkInschriftKopf.isSelected()==true){
+
+	private void checkInschriftKopf() throws SQLException {
+		if (checkInschriftKopf.isSelected() == true) {
 			wertInschriftKopf = resultset.getString(5);
 			countValues++;
-		}else
+		} else
 			wertInschriftKopf = null;
 	}
-	private void checkInschriftZahl() throws SQLException{
-		if(checkInschriftZahl.isSelected()==true){
+
+	private void checkInschriftZahl() throws SQLException {
+		if (checkInschriftZahl.isSelected() == true) {
 			wertInschriftZahl = resultset.getString(6);
 			countValues++;
-		}else
+		} else
 			wertInschriftZahl = null;
 	}
-	private void checkZustand() throws SQLException{
-		if(checkZustand.isSelected()==true){
+
+	private void checkZustand() throws SQLException {
+		if (checkZustand.isSelected() == true) {
 			wertZustand = resultset.getString(7);
 			countValues++;
-		}else
+		} else
 			wertZustand = null;
 	}
-	private void checkPraegeort() throws SQLException{
-		if(checkPraegeort.isSelected()==true){
+
+	private void checkPraegeort() throws SQLException {
+		if (checkPraegeort.isSelected() == true) {
 			wertPraegeort = resultset.getString(8);
 			countValues++;
-		}else
+		} else
 			wertPraegeort = null;
 	}
-	private void myURL(){
-		if (chooseURL.getValue().equals("baldwin.co.uk")){
+
+	private void myURL() {
+		if (chooseURL.getValue().equals("baldwin.co.uk")) {
 			url = "baldwin.co.uk";
 			urlSelected = true;
-		}
-		else if (chooseURL.getValue().equals("coins.ha.com")){
+		} else if (chooseURL.getValue().equals("coins.ha.com")) {
 			url = "coins.ha.com";
 			urlSelected = true;
-		}
-		else urlSelected = false;
+		} else
+			urlSelected = false;
 	}
 }
