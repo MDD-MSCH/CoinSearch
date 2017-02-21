@@ -21,6 +21,8 @@ public abstract class Bot {
 		this.element = element;
 	}
 	
+	public abstract boolean checkIfCoinExsist();
+	
 	public abstract String getResultPageSourceByCSSselector(String cssSelector);
 	
 	public abstract String getResultURLbyCSSselector(String cssSelector);

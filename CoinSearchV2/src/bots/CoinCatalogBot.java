@@ -37,7 +37,18 @@ public class CoinCatalogBot extends Bot {
 	private void submitByJavascript(String javascript) {
 		((JavascriptExecutor) getHeadlessdriver()).executeScript(javascript);
 	}
-
+	
+	@Override
+	public boolean checkIfCoinExsist(){
+		try{
+			getResultPageSourceByCSSselector(".error");
+		}catch(org.openqa.selenium.NoSuchElementException e){
+			System.out.println("Coin found");
+			return true;
+		}
+		return false;
+	}
+	
 	@Override
 	public String getResultPageSourceByCSSselector(String cssSelector) {
 		getHeadlessdriver().findElement(By.cssSelector(cssSelector)).click();
@@ -55,7 +66,7 @@ public class CoinCatalogBot extends Bot {
 		getHeadlessdriver().findElement(By.cssSelector(cssSelector)).click();
 	}
 
-	public String getTabellenText(String uriStr, boolean span) {
+	public String getTableText(String uriStr, boolean span) {
 		final StringBuffer buf = new StringBuffer(1000);
 		try {
 			HTMLDocument doc = new HTMLDocument() {
@@ -64,33 +75,33 @@ public class CoinCatalogBot extends Bot {
 
 				public HTMLEditorKit.ParserCallback getReader(int pos) {
 					return new HTMLEditorKit.ParserCallback() {
-						HTML.Tag tg = null;
+						HTML.Tag tag = null;
 
-						public void handleStartTag(HTML.Tag t, MutableAttributeSet a, int pos) {
-							tg = t;
-							if (t == HTML.Tag.TABLE){
+						public void handleStartTag(HTML.Tag tag, MutableAttributeSet a, int pos) {
+							this.tag = tag;
+							if (tag == HTML.Tag.TABLE){
 								buf.append("");
 							}
 						}
 
-						public void handleEndTag(HTML.Tag t, int pos) {
-							if (t == HTML.Tag.TR || t == HTML.Tag.TH){
+						public void handleEndTag(HTML.Tag tag, int pos) {
+							if (tag == HTML.Tag.TR || tag == HTML.Tag.TH){
 								buf.append("\n");
 							}
-							if (t == HTML.Tag.TD){
+							if (tag == HTML.Tag.TD){
 								buf.append("\t");
 							}
 						}
 
 						public void handleText(char[] data, int pos) {
-							if (tg == HTML.Tag.TD) {
+							if (tag == HTML.Tag.TD) {
 								buf.append(data);
 							}
-							if (tg == HTML.Tag.A) {
+							if (tag == HTML.Tag.A) {
 								buf.append(data);
 							}
 							if (span) {
-								if (tg == HTML.Tag.SPAN) {
+								if (tag == HTML.Tag.SPAN) {
 									buf.append(data);
 								}
 							}

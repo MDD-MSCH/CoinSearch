@@ -28,151 +28,154 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import tools.WebsiteReader;
 
-
-public class Tab1Controller implements Runnable{
+public class Tab1Controller implements Runnable {
 	private static final String start1 = "Allgemeine Daten";
 	private static final String end1 = "Katalognummern";
 	private static final String start2 = "Details";
 	private static final String end2 = "weitere Hinweise finden Sie in der";
-	//public MainController main;
+	// public MainController main;
 	private WebDriver foxdriver;
 	private WebDriverWait wait;
 	private String keywords;
 	public String text, c;
-	
-			
+
 	@FXML
-	public TextArea texts;	
-	
+	public TextArea texts;
+
 	@FXML
 	public Button load;
-	
+
 	@FXML
-	public void sendText(){
+	public void sendText() {
 		System.out.println(text);
-		try (BufferedReader bfrd = new BufferedReader(new InputStreamReader(new FileInputStream("temp1.txt"), "UTF-8"))){
+		try (BufferedReader bfrd = new BufferedReader(
+				new InputStreamReader(new FileInputStream("temp1.txt"), "UTF-8"))) {
 			while ((c = bfrd.readLine()) != null) {
-				texts.appendText(c+"\n");
+				texts.appendText(c + "\n");
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		}	
-	}
-	@FXML
-	public void initialize() {
-		
+		}
 	}
 
-	/*public void init(MainController mainController) {
-		main = mainController;
-		
-	}	*/
-			
+	@FXML
+	public void initialize() {
+
+	}
+
+	/*
+	 * public void init(MainController mainController) { main = mainController;
+	 * 
+	 * }
+	 */
+
 	public String getKeywords() {
 		return keywords;
 	}
-	
+
 	@Override
 	public void run() {
 		try {
-			
 			lookaround();
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}	
+		}
 	}
-	
-	private void lookaround() throws MalformedURLException, IOException{
-		keywords= getValues();
-		foxdriver = new FirefoxDriver();	
+
+	private void lookaround() throws MalformedURLException, IOException {
+		keywords = getValues();
+		foxdriver = new FirefoxDriver();
 		wait = new WebDriverWait(foxdriver, 10);
 		String url = "";
 		List<String> list1 = new ArrayList<String>();
 
-		try{
-			if (SearchTab.getUrl().equals("muenzkatalog-online.de")){
+		try {
+			if (SearchTab.getUrl().equals("muenzkatalog-online.de")) {
 				CoinCatalogBot cobo = new CoinCatalogBot("http://www.muenzkatalog-online.de/index.php?cstart=0&cstop=400");
 				cobo.searchFor("1 Deutsche Mark");
+				if (cobo.checkIfCoinExsist()) {
+					String pageSource = cobo.getResultPageSourceByCSSselector(
+							"html body table.strukturtabelle tbody tr td.inhaltszelle div.divrahmen center table.tabelle_typ1 tbody tr td.tabelle_typ1_inhalt a");
+					String coinInfo = cobo.getSubstringBetween(pageSource, start1, end1);
+					String table = cobo.getTableText(coinInfo, false);
+					System.out.println(table);
 
-				String text = cobo.getResultPageSourceByCSSselector("html body table.strukturtabelle tbody tr td.inhaltszelle div.divrahmen center table.tabelle_typ1 tbody tr td.tabelle_typ1_inhalt a");
-				String d = cobo.getSubstringBetween(text, start1, end1);
-				String tabelle = cobo.getTabellenText(d, false);
-				System.out.println(tabelle);
-				
-				String e = cobo.getSubstringBetween(text, start2, end2);
-				String tabelle2 = cobo.getTabellenText(e, true);
-				System.out.println(tabelle2);
+					String priceInfo = cobo.getSubstringBetween(pageSource, start2, end2);
+					String table2 = cobo.getTableText(priceInfo, true);
+					System.out.println(table2);
+				}
 			}
-			if (SearchTab.getUrl().equals("baldwin.co.uk")){
-			foxdriver.get("http://www.baldwin.co.uk/coins.html?limit=all");
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input.dropdown.dd-all")));
-			url = "http://www.baldwin.co.uk/coins.html?limit=all";
-			
-			}else if(SearchTab.getUrl().equals("coins.ha.com")){ 
-			foxdriver.get("http://www.coins.ha.com");
-			url = "http://www.coins.ha.com";
+			if (SearchTab.getUrl().equals("baldwin.co.uk")) {
+				foxdriver.get("http://www.baldwin.co.uk/coins.html?limit=all");
+				wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input.dropdown.dd-all")));
+				url = "http://www.baldwin.co.uk/coins.html?limit=all";
+
+			} else if (SearchTab.getUrl().equals("coins.ha.com")) {
+				foxdriver.get("http://www.coins.ha.com");
+				url = "http://www.coins.ha.com";
 			}
-//			list1 = new LinkGetter().getLinks(url);
-//			System.out.println( list1 );   
+			// list1 = new LinkGetter().getLinks(url);
+			// System.out.println( list1 );
 			reading(url);
-			//texts.setText("test");
-		} catch (org.openqa.selenium.remote.UnreachableBrowserException e){
-				System.out.println("Error communicating with the remote browser. It may have died.");
-			}
+			// texts.setText("test");
+		} catch (org.openqa.selenium.remote.UnreachableBrowserException e) {
+			System.out.println("Error communicating with the remote browser. It may have died.");
 		}
-	private String getValues(){ //Lamda??
+	}
+
+	private String getValues() {
 		StringBuilder values = new StringBuilder();
-		
+
 		String value1 = SearchTab.getCheckWert();
-		if (value1 != null){
-			values.append(value1+";");
+		if (value1 != null) {
+			values.append(value1 + ";");
 		}
 		String value2 = SearchTab.getCheckWaehrung();
-		if (value2 != null){
-			values.append(value2+";");
+		if (value2 != null) {
+			values.append(value2 + ";");
 		}
 		String value3 = SearchTab.getCheckJahr();
-		if (value3 != null){
-			values.append(value3+";");
+		if (value3 != null) {
+			values.append(value3 + ";");
 		}
 		String value4 = SearchTab.getCheckInschriftKopf();
-		if (value4 != null){
-			values.append(value4+";");
+		if (value4 != null) {
+			values.append(value4 + ";");
 		}
-				
+
 		String value5 = SearchTab.getCheckInschriftZahl();
-		if (value5 != null){
-			values.append(value5+";");
+		if (value5 != null) {
+			values.append(value5 + ";");
 		}
 		String value6 = SearchTab.getCheckZustand();
-		if (value6 != null){
-			values.append(value6+";");
+		if (value6 != null) {
+			values.append(value6 + ";");
 		}
 		String value7 = SearchTab.getCheckPraegeort();
-		if (value7 != null){
-			values.append(value7+";");
+		if (value7 != null) {
+			values.append(value7 + ";");
 		}
-		return values.toString();	
+		return values.toString();
 	}
-	
-	private void reading(String url){
-//		List<String> list1 = new ArrayList<String>();
-	 File file = new File("temp1.txt");
-     FileOutputStream ausgabe = null;
-        try {
-            ausgabe = new FileOutputStream(file);
-        } catch (FileNotFoundException e1) {
-            e1.printStackTrace();
-        }
-        DataOutputStream raus = new DataOutputStream(ausgabe);
-        text=new WebsiteReader().getStrFromUrl(url);
-//        list1 = new LinkGetter().getLinks(test);
-        try {
-            raus.writeBytes(text);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
+	private void reading(String url) {
+		// List<String> list1 = new ArrayList<String>();
+		File file = new File("temp1.txt");
+		FileOutputStream ausgabe = null;
+		try {
+			ausgabe = new FileOutputStream(file);
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		}
+		DataOutputStream raus = new DataOutputStream(ausgabe);
+		text = new WebsiteReader().getStrFromUrl(url);
+		// list1 = new LinkGetter().getLinks(test);
+		try {
+			raus.writeBytes(text);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
