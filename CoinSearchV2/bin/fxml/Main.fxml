@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
+   <children>
+      <TabPane layoutX="1.0" layoutY="-2.0" maxHeight="500.0" maxWidth="580.0" minHeight="500.0" minWidth="-Infinity" prefHeight="500.0" prefWidth="580.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
+        <tabs>
+          <Tab closable="false" text="Welcome ">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="279.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fitHeight="152.0" fitWidth="155.0" layoutX="235.0" layoutY="220.0">
+                           <image>
+                              <Image url="@../images/coin.png" />
+                           </image>
+                        </ImageView>
+                     </children></AnchorPane>
+            </content>
+          </Tab>
+          <Tab closable="false" text="NewEntry ">
+            <content>
+             <fx:include fx:id="newEntryTab" source="tabs/NewEntryTab.fxml" />
+            </content>
+          </Tab>
+            <Tab closable="false" text="EditEntry ">
+              <content>
+                <fx:include fx:id="editEntryTab" source="tabs/EditEntryTab.fxml" />
+              </content>
+            </Tab>
+            <Tab closable="false" text="Search ">
+              <content>
+                <fx:include fx:id="searchTab" source="tabs/SearchTab.fxml" />
+              </content>
+            </Tab>
+            <Tab closable="false" text="Results ">
+              <content>
+                <fx:include fx:id="tab1" source="tabs/Tab1.fxml" />
+              </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+      <ImageView fitHeight="100.0" fitWidth="100.0" focusTraversable="true" layoutX="290.0" layoutY="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="480.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+         <image>
+            <Image url="@../images/Upright.png" />
+         </image>
+      </ImageView>
+      <ImageView accessibleRole="LIST_VIEW" fitHeight="100.0" fitWidth="100.0" focusTraversable="true" layoutX="0.0" layoutY="0.0" AnchorPane.bottomAnchor="498.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="480.0" AnchorPane.topAnchor="40.0">
+         <image>
+            <Image url="@../images/Upleft.png" />
+         </image>
+         <cursor>
+            <Cursor fx:constant="NONE" />
+         </cursor>
+      </ImageView>
+      <ImageView fitHeight="100.0" fitWidth="100.0" focusTraversable="true" layoutX="290.0" layoutY="286.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="480.0" AnchorPane.topAnchor="520.0">
+         <image>
+            <Image url="@../images/Downleft.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="290.0" layoutY="286.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="480.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="520.0">
+                           <image>
+                              <Image url="@../images/Downright.png" />
+                           </image>
+      </ImageView>
+   </children>
+</AnchorPane>

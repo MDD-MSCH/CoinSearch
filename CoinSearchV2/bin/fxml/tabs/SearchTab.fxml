@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="600.0" prefWidth="580.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.tab.SearchTab">
+   <children>
+   	  <Label layoutX="160.0" layoutY="140.0" prefHeight="26.0" prefWidth="125.0" text="ID:" />
+      <Label fx:id="id" layoutX="400.0" layoutY="150.0" />
+      <Label fx:id="wert" layoutX="400.0" layoutY="187.0" />
+      <Label fx:id="waehrung" layoutX="400.0" layoutY="227.0" />
+      <Label fx:id="jahr" layoutX="400.0" layoutY="267.0" />
+      <Label fx:id="inschriftKopf" layoutX="400.0" layoutY="307.0" />
+      <Label fx:id="inschriftZahl" layoutX="400.0" layoutY="347.0" />
+      <Label fx:id="zustand" layoutX="400.0" layoutY="387.0" />
+      <Label fx:id="praegeort" layoutX="400.0" layoutY="427.0" />
+      <Label fx:id="hint" layoutX="145.0" layoutY="545.0" />
+
+      <ComboBox fx:id="chooseURL" layoutX="133.0" layoutY="49.0" prefHeight="26.0" prefWidth="349.0" promptText="Choose a Website" />
+      <CheckBox fx:id="checkWert" layoutX="130.0" layoutY="180.0" mnemonicParsing="false" text="Value:" />
+      <CheckBox fx:id="checkWaehrung" layoutX="130.0" layoutY="220.0" mnemonicParsing="false" text="Currency:" />
+      <CheckBox fx:id="checkJahr" layoutX="130.0" layoutY="260.0" mnemonicParsing="false" text="Year:" />
+      <CheckBox fx:id="checkInschriftKopf" layoutX="130.0" layoutY="300.0" mnemonicParsing="false" text="Inscription Avers:" />
+      <CheckBox fx:id="checkInschriftZahl" layoutX="130.0" layoutY="340.0" mnemonicParsing="false" text="Inscription Revers:" />
+      <CheckBox fx:id="checkZustand" layoutX="130.0" layoutY="380.0" mnemonicParsing="false" text="Conservation Level:" />
+      <CheckBox fx:id="checkPraegeort" layoutX="130.0" layoutY="420.0" mnemonicParsing="false" text="Minting:" />
+
+
+     <ToolBar layoutX="160.0" layoutY="489.0" prefHeight="40.0" prefWidth="260.0">
+        <items>
+          <Button mnemonicParsing="false" onAction="#ganzVor" text="|&lt;" />
+            <Button mnemonicParsing="false" onAction="#einenZurueck" text="&lt;&lt;" />
+            <Button mnemonicParsing="false" onAction="#startSearching" text="Search" />
+            <Button mnemonicParsing="false" onAction="#einenVor" text="&gt;&gt;" />
+            <Button mnemonicParsing="false" onAction="#ganzZurueck" text="&gt;|" />
+        </items>
+      </ToolBar>
+      <ImageView fitHeight="100.0" fitWidth="99.0" layoutX="241.0" layoutY="204.0">
+         <image>
+            <Image url="@../../images/coin6.png" />
+         </image>
+      </ImageView>
+      </children>
+</AnchorPane>

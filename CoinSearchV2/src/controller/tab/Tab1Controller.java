@@ -20,6 +20,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import bots.CoinCatalogBot;
 import controller.MainController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -29,7 +30,10 @@ import tools.WebsiteReader;
 
 
 public class Tab1Controller implements Runnable{
-	
+	private static final String start1 = "Allgemeine Daten";
+	private static final String end1 = "Katalognummern";
+	private static final String start2 = "Details";
+	private static final String end2 = "weitere Hinweise finden Sie in der";
 	//public MainController main;
 	private WebDriver foxdriver;
 	private WebDriverWait wait;
@@ -81,17 +85,30 @@ public class Tab1Controller implements Runnable{
 	}
 	
 	private void lookaround() throws MalformedURLException, IOException{
-		getValues();
+		keywords= getValues();
 		foxdriver = new FirefoxDriver();	
 		wait = new WebDriverWait(foxdriver, 10);
 		String url = "";
 		List<String> list1 = new ArrayList<String>();
 
 		try{
+			if (SearchTab.getUrl().equals("muenzkatalog-online.de")){
+				CoinCatalogBot cobo = new CoinCatalogBot("http://www.muenzkatalog-online.de/index.php?cstart=0&cstop=400");
+				cobo.searchFor("1 Deutsche Mark");
+				String text = cobo.getFirstResultPageSource();
+				String d = cobo.substringBetween(text, start1, end1);
+				String tabelle = cobo.getTabellenText(d, false);
+				System.out.println(tabelle);
+				
+				String e = cobo.substringBetween(text, start2, end2);
+				String tabelle2 = cobo.getTabellenText(e, true);
+				System.out.println(tabelle2);
+			}
 			if (SearchTab.getUrl().equals("baldwin.co.uk")){
 			foxdriver.get("http://www.baldwin.co.uk/coins.html?limit=all");
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input.dropdown.dd-all")));
 			url = "http://www.baldwin.co.uk/coins.html?limit=all";
+			
 			}else if(SearchTab.getUrl().equals("coins.ha.com")){ 
 			foxdriver.get("http://www.coins.ha.com");
 			url = "http://www.coins.ha.com";
@@ -104,7 +121,7 @@ public class Tab1Controller implements Runnable{
 				System.out.println("Error communicating with the remote browser. It may have died.");
 			}
 		}
-	private void getValues(){ //Lamda??
+	private String getValues(){ //Lamda??
 		StringBuilder values = new StringBuilder();
 		
 		String value1 = SearchTab.getCheckWert();
@@ -136,7 +153,7 @@ public class Tab1Controller implements Runnable{
 		if (value7 != null){
 			values.append(value7+";");
 		}
-		keywords=values.toString();	
+		return values.toString();	
 	}
 	
 	private void reading(String url){

@@ -8,12 +8,10 @@
 		</accessrules>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
-	<classpathentry kind="lib" path="D:/02 Java/MariaDB/mariadb-java-client-1.5.5.jar"/>
-	<classpathentry kind="lib" path="D:/02 Java/MariaDB/mariadb-java-client-1.5.5-javadoc.jar"/>
-	<classpathentry kind="lib" path="D:/02 Java/MariaDB/mariadb-java-client-1.5.5-sources.jar"/>
-	<classpathentry kind="lib" path="D:/02 Java/Derby/db-derby-10.13.1.1-bin/lib/derby.jar"/>
-	<classpathentry kind="lib" path="D:/02 Java/Selenium/selenium-java-2.0b1.jar"/>
-	<classpathentry kind="lib" path="D:/02 Java/Selenium/selenium-support-2.29.1-sources.jar"/>
-	<classpathentry kind="lib" path="D:/02 Java/Selenium/selenium-server-standalone-3.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/derby.jar"/>
+	<classpathentry kind="lib" path="lib/mariadb-java-client-1.5.5-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/mariadb-java-client-1.5.5-sources.jar"/>
+	<classpathentry kind="lib" path="lib/mariadb-java-client-1.5.5.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-server-standalone-3.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
