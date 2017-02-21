@@ -95,12 +95,13 @@ public class Tab1Controller implements Runnable{
 			if (SearchTab.getUrl().equals("muenzkatalog-online.de")){
 				CoinCatalogBot cobo = new CoinCatalogBot("http://www.muenzkatalog-online.de/index.php?cstart=0&cstop=400");
 				cobo.searchFor("1 Deutsche Mark");
-				String text = cobo.getFirstResultPageSource();
-				String d = cobo.substringBetween(text, start1, end1);
+
+				String text = cobo.getResultPageSourceByCSSselector("html body table.strukturtabelle tbody tr td.inhaltszelle div.divrahmen center table.tabelle_typ1 tbody tr td.tabelle_typ1_inhalt a");
+				String d = cobo.getSubstringBetween(text, start1, end1);
 				String tabelle = cobo.getTabellenText(d, false);
 				System.out.println(tabelle);
 				
-				String e = cobo.substringBetween(text, start2, end2);
+				String e = cobo.getSubstringBetween(text, start2, end2);
 				String tabelle2 = cobo.getTabellenText(e, true);
 				System.out.println(tabelle2);
 			}
