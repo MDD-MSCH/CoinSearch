@@ -17,8 +17,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.*;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
-// First result cssSelector //"html body table.strukturtabelle tbody tr td.inhaltszelle div.divrahmen center table.tabelle_typ1 tbody tr td.tabelle_typ1_inhalt a"
-// Secound result cssSelector ".tabelle_typ1 > tbody:nth-child(1) > tr:nth-child(3) > td:nth-child(2) > a:nth-child(1)"
+
 // Back to searchpage CSS selector: "td.navigationselement:nth-child(3) > a:nth-child(1)"
 public class CoinCatalogBot extends Bot {
 

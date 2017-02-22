@@ -41,7 +41,58 @@ public class SearchTab extends ConnectionHelper {
 			errorAlert.show();
 		}
 	}
+	
+	@FXML
+	private void ganzVor() {
+		if (first()) {
+			setData();
+		}
+	}
 
+	@FXML
+	private void ganzZurueck() {
+		if (last()) {
+			setData();
+		}
+	}
+
+	@FXML
+	private void einenVor() {
+		if (oneForward()) {
+			setData();
+		}
+	}
+
+	@FXML
+	private void einenZurueck() {
+		if (oneBackward()) {
+			setData();
+		}
+	}
+
+	@FXML
+	private void startSearching(ActionEvent event) {
+		urlSelected = false;
+		countValues = 0;
+		try {
+			checkValues();
+			if (countValues >= 1 && urlSelected == true) {
+				Thread workerThread = new Thread(new Tab1Controller());
+				workerThread.start();
+			} else if (countValues == 0 && urlSelected == true) {
+				hint.setText("Please choose a value");
+			}
+			if (countValues == 0 && urlSelected == false) {
+				hint.setText("Please choose a website and at least one value");
+			} else if (countValues > 0 && urlSelected == false) {
+				hint.setText("Please choose a website");
+			}
+		} catch (java.lang.RuntimeException e) {
+			errorAlert.setContentText("Problem by start searching: \n" + e.toString());
+			errorAlert.show();
+		}
+	}
+	
 	public static String getUrl() {
 		String value = url;
 		return value;
@@ -94,57 +145,6 @@ public class SearchTab extends ConnectionHelper {
 			praegeort.setText(resultset.getString(8));
 		} catch (Exception e) {
 			errorAlert.setContentText("Problem by setting data: \n" + e.toString());
-			errorAlert.show();
-		}
-	}
-
-	@FXML
-	private void ganzVor() {
-		if (first()) {
-			setData();
-		}
-	}
-
-	@FXML
-	private void ganzZurueck() {
-		if (last()) {
-			setData();
-		}
-	}
-
-	@FXML
-	private void einenVor() {
-		if (oneForward()) {
-			setData();
-		}
-	}
-
-	@FXML
-	private void einenZurueck() {
-		if (oneBackward()) {
-			setData();
-		}
-	}
-
-	@FXML
-	private void startSearching(ActionEvent event) {
-		urlSelected = false;
-		countValues = 0;
-		try {
-			checkValues();
-			if (countValues >= 1 && urlSelected == true) {
-				Thread workerThread = new Thread(new Tab1Controller());
-				workerThread.start();
-			} else if (countValues == 0 && urlSelected == true) {
-				hint.setText("Please choose a value");
-			}
-			if (countValues == 0 && urlSelected == false) {
-				hint.setText("Please choose a website and at least one value");
-			} else if (countValues > 0 && urlSelected == false) {
-				hint.setText("Please choose a website");
-			}
-		} catch (java.lang.RuntimeException e) {
-			errorAlert.setContentText("Problem by start searching: \n" + e.toString());
 			errorAlert.show();
 		}
 	}
@@ -222,13 +222,17 @@ public class SearchTab extends ConnectionHelper {
 	}
 
 	private void myURL() {
+		if (chooseURL.getValue().equals("muenzkatalog-online.de")){
+			url = "muenzkatalog-online.de";
+			urlSelected = true;
+		}
 		if (chooseURL.getValue().equals("baldwin.co.uk")) {
 			url = "baldwin.co.uk";
 			urlSelected = true;
-		} else if (chooseURL.getValue().equals("coins.ha.com")) {
+		}
+		if (chooseURL.getValue().equals("coins.ha.com")) {
 			url = "coins.ha.com";
 			urlSelected = true;
-		} else
-			urlSelected = false;
+		} 
 	}
 }

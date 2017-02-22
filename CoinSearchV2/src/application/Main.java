@@ -6,8 +6,7 @@ import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 //Todo Error logfile Writer
-//Do it as Maven project
-// Write a bot for searching in the Website
+
 public class Main extends Application {
 	
 
