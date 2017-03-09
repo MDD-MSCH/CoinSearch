@@ -4,11 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+
 
 public abstract class ConnectionHelper {
 	protected Alert errorAlert = new Alert(AlertType.ERROR);
@@ -17,8 +17,11 @@ public abstract class ConnectionHelper {
 	protected ResultSet resultset;
 	protected ObservableList<String> conservationLevelsList = FXCollections.observableArrayList("GE", "G", "SG", "S", "S-SS", "SS", "SS-VZ", "VZ", "VZ-ST", "ST");
 	
-
-	protected void initAlert(){
+	protected void init(){
+		initAlert();
+		getConnection();
+	}
+	private void initAlert(){
 		errorAlert.setTitle("Error Message");
 		errorAlert.setHeaderText("Exception Alert");
 	}

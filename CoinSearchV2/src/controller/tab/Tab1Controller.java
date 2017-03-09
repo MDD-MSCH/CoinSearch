@@ -12,13 +12,20 @@ import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 
 import bots.CoinCatalogBot;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import tools.Progress;
 import tools.SystemProps;
 
 public class Tab1Controller implements Runnable, SystemProps {
 	private CoinCatalogBot cobo;
+	protected Progress progress;
+	private static final String BACK_TO_SEARCHPAGE = "td.navigationselement:nth-child(3) > a:nth-child(1)";
 	private static final String RESULT_ONE = "html body table.strukturtabelle tbody tr td.inhaltszelle div.divrahmen center table.tabelle_typ1 tbody tr td.tabelle_typ1_inhalt a";
 	private static final String RESULT_TWO = ".tabelle_typ1 > tbody:nth-child(1) > tr:nth-child(3) > td:nth-child(2) > a:nth-child(1)";
 	private static final String RESULT_THREE = ".tabelle_typ1 > tbody:nth-child(1) > tr:nth-child(5) > td:nth-child(2) > a:nth-child(1)";
@@ -29,6 +36,7 @@ public class Tab1Controller implements Runnable, SystemProps {
 
 	private String keywords;
 	public String text, c;
+	
 
 	@FXML
 	public TextArea texts;
@@ -51,12 +59,19 @@ public class Tab1Controller implements Runnable, SystemProps {
 
 	@FXML
 	public void initialize() {
-
+		
 	}
 
 	@Override
 	public void run() {
 		try {
+			progress = new Progress();
+			this.progress.setProgress(0);
+			this.progress.progressProperty().addListener(new ChangeListener<Object>(){
+				@Override
+				public void changed(ObservableValue<? extends Object> arg0, Object arg1, Object arg2) {
+				}
+			});
 			lookaround();
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -64,19 +79,28 @@ public class Tab1Controller implements Runnable, SystemProps {
 			e.printStackTrace();
 		}
 	}
-
+	
 	private void lookaround() throws MalformedURLException, IOException {
 		keywords = getValues();
 		StringBuffer collectedResults = new StringBuffer();
+		
 		try {
 			if (SearchTab.getUrl().equals("muenzkatalog-online.de")) {
 				cobo = new CoinCatalogBot("http://www.muenzkatalog-online.de/index.php?cstart=0&cstop=400");
+				progress.setProgress(0.3);
 				cobo.searchFor("1 Deutsche Mark"); // keywords
+				progress.setProgress(0.4);
 				if (cobo.checkIfCoinExsist()) {
+					progress.setProgress(0.5);
 					collectedResults.append(getCollectedResult(RESULT_ONE).concat("\n"));
+					progress.setProgress(0.6);
 					collectedResults.append(getCollectedResult(RESULT_TWO).concat("\n"));
+					progress.setProgress(0.7);
 					collectedResults.append(getCollectedResult(RESULT_THREE).concat("\n"));
+					progress.setProgress(0.8);
 					writeCollectedResults(collectedResults.toString());
+				}else{
+					progress.setProgress(0.0);
 				}
 			}
 			if (SearchTab.getUrl().equals("baldwin.co.uk")) {
@@ -134,14 +158,17 @@ public class Tab1Controller implements Runnable, SystemProps {
 
 		String priceInfo = cobo.getSubstringBetween(pageSource, START2, END2);
 		result.append(cobo.getTableText(priceInfo, true));
+		cobo.backToSearchpageByCSSselector(BACK_TO_SEARCHPAGE);
 		return result.toString();
 	}
 
 	private void writeCollectedResults(String results) {
+		progress.setProgress(0.9);
 		try (BufferedWriter writer = new BufferedWriter(
 				new OutputStreamWriter(new FileOutputStream(FULL_PATH_TO_RESULTS_NAME), "UTF-8"))) {
 			writer.write(results);
 			writer.flush();
+			progress.setProgress(1.0);
 			System.out.println("Done"); // to do some information for the user
 		} catch (IOException e1) {
 			e1.printStackTrace();

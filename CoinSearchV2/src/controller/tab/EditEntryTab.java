@@ -7,6 +7,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import tools.ConnectionHelper;
 import tools.DBconnection;
+import tools.LetterTextField;
+import tools.NumberTextField;
 
 public class EditEntryTab extends ConnectionHelper{
 	
@@ -15,15 +17,21 @@ public class EditEntryTab extends ConnectionHelper{
 	private Label id, wertLabel, waehrungLabel, jahrLabel, inschriftKopfLabel, inschriftZahlLabel, zustandLabel,
 			praegeortLabel;
 	@FXML
-	private TextField wert, waehrung, jahr, inschriftKopf, inschriftZahl, praegeort;
-
+	private TextField wert,  inschriftKopf, inschriftZahl, praegeort;
+	
+	@FXML
+	private NumberTextField jahr;
+	
+	@FXML
+	private LetterTextField waehrung;
+	
 	@FXML
 	private ComboBox<String> zustand;
 	
 	@FXML
 	public void initialize() {
 		zustand.setItems(conservationLevelsList);
-		getConnection();
+		init();
 		try {
 			if (resultset.next()) {
 				setData();

@@ -4,6 +4,7 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -22,7 +23,7 @@
       <Label fx:id="praegeort" layoutX="400.0" layoutY="427.0" />
       <Label fx:id="hint" layoutX="145.0" layoutY="545.0" />
 
-      <ComboBox fx:id="chooseURL" layoutX="133.0" layoutY="49.0" prefHeight="26.0" prefWidth="349.0" promptText="Choose a Website" />
+      <ComboBox fx:id="chooseURL" layoutX="117.0" layoutY="50.0" prefHeight="26.0" prefWidth="349.0" promptText="Choose a Website" />
       <CheckBox fx:id="checkWert" layoutX="130.0" layoutY="180.0" mnemonicParsing="false" text="Value:" />
       <CheckBox fx:id="checkWaehrung" layoutX="130.0" layoutY="220.0" mnemonicParsing="false" text="Currency:" />
       <CheckBox fx:id="checkJahr" layoutX="130.0" layoutY="260.0" mnemonicParsing="false" text="Year:" />
@@ -46,5 +47,6 @@
             <Image url="@../../images/coin6.png" />
          </image>
       </ImageView>
+      <ProgressBar fx:id="progressbar" layoutX="191.0" layoutY="104.0" prefWidth="200.0" progress="0.0" />
       </children>
 </AnchorPane>

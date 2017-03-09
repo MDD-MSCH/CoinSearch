@@ -1,6 +1,5 @@
 package controller.tab;
 
-
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
@@ -10,27 +9,34 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import tools.ConnectionHelper;
 import tools.DBconnection;
+import tools.LetterTextField;
+import tools.NumberTextField;
 import tools.checkTextField;
 
-public class NewEntryTab extends ConnectionHelper{
+public class NewEntryTab extends ConnectionHelper {
 	private checkTextField check;
 	
 	@FXML
 	private Label id, wertLabel, waehrungLabel, jahrLabel, inschriftKopfLabel, inschriftZahlLabel, zustandLabel,
 			praegeortLabel, hintLabel;
 	@FXML
-	private TextField wert, waehrung, jahr, inschriftKopf, inschriftZahl,  praegeort;
+	private TextField wert, inschriftKopf, inschriftZahl, praegeort;
+
+	@FXML 
+	private NumberTextField jahr;
+	
+	@FXML 
+	private LetterTextField waehrung;
 	
 	@FXML
 	private ComboBox<String> zustand;
-	
+
 	@FXML
 	public void initialize() {
 		zustand.setItems(conservationLevelsList);
-		initAlert();
-		getConnection();
+		init();
 	}
-	
+
 	@FXML
 	private void uebernehmen() {
 		check = new checkTextField();
@@ -61,19 +67,12 @@ public class NewEntryTab extends ConnectionHelper{
 				hintLabel.setText("Please fill up all fields correctly.");
 			}
 		} else {
-			hintLabel.setText("Please fill up all fields correctly."); 
+			hintLabel.setText("Please fill up all fields correctly.");
 		}
 	}
 
 	private boolean checkInput() {
 		boolean readyForExecute = false;
-
-		if (!check.onlyNumbers(jahr.getText())) {
-			jahr.setText("Only Numbers!");
-		}
-		if (!check.onlyLetters(praegeort.getText())) {
-			praegeort.setText("Only Letters!");
-		}
 		if (check.onlyNumbers(jahr.getText()) && check.onlyLetters(praegeort.getText())) {
 			readyForExecute = true;
 		}
@@ -86,7 +85,7 @@ public class NewEntryTab extends ConnectionHelper{
 		jahr.setText(null);
 		inschriftKopf.setText(null);
 		inschriftZahl.setText(null);
-//		zustand.setText(null);
+		// zustand.setText(null);
 		praegeort.setText(null);
 		hintLabel.setText(null);
 	}

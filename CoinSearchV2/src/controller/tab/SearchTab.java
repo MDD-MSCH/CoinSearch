@@ -9,13 +9,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import tools.ConnectionHelper;
 
 public class SearchTab extends ConnectionHelper {
 	private static String url, wertLabel, wertWaehrung, wertJahr, wertInschriftKopf, wertInschriftZahl, wertZustand, wertPraegeort;
 	private byte countValues;
 	private boolean urlSelected;
-
+	private Tab1Controller tc = null;
 	private ObservableList<String> list = FXCollections.observableArrayList("muenzkatalog-online.de", "baldwin.co.uk", "coins.ha.com", "mdm.de");
 
 	@FXML
@@ -29,8 +30,12 @@ public class SearchTab extends ConnectionHelper {
 			checkPraegeort;
 
 	@FXML
+	private ProgressBar progressbar;
+	
+	@FXML
 	public void initialize() {
 		chooseURL.setItems(list);
+		
 		getConnection();
 		try {
 			if (resultset.next()) {
@@ -77,19 +82,24 @@ public class SearchTab extends ConnectionHelper {
 		try {
 			checkValues();
 			if (countValues >= 1 && urlSelected == true) {
-				Thread workerThread = new Thread(new Tab1Controller());
+				Thread workerThread = new Thread(tc = new Tab1Controller());
 				workerThread.start();
-			} else if (countValues == 0 && urlSelected == true) {
+				
+		//		progressbar.progressProperty().bind(tc.progress.progressProperty());
+			} 
+			if (countValues == 0 && urlSelected == true) {
 				hint.setText("Please choose a value");
 			}
 			if (countValues == 0 && urlSelected == false) {
 				hint.setText("Please choose a website and at least one value");
-			} else if (countValues > 0 && urlSelected == false) {
+			}
+			if (countValues > 0 && urlSelected == false) {
 				hint.setText("Please choose a website");
 			}
 		} catch (java.lang.RuntimeException e) {
 			errorAlert.setContentText("Problem by start searching: \n" + e.toString());
 			errorAlert.show();
+			e.printStackTrace();
 		}
 	}
 	

@@ -17,8 +17,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.*;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
-
-// Back to searchpage CSS selector: "td.navigationselement:nth-child(3) > a:nth-child(1)"
 public class CoinCatalogBot extends Bot {
 
 	public CoinCatalogBot(String URL) {

@@ -8,6 +8,8 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import tools.NumberTextField?>
+<?import tools.LetterTextField?>
 
 <AnchorPane prefHeight="600.0" prefWidth="580.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.tab.NewEntryTab">
    <children>
@@ -22,8 +24,8 @@
       <Label fx:id="praegeortLabel" layoutX="160.0" layoutY="420.0" text="Minting:" />
       <Label fx:id="hintLabel" layoutX="163.0" layoutY="455.0" prefHeight="20.0" prefWidth="250.0" />
       <TextField fx:id="wert" layoutX="390.0" layoutY="180.0" prefHeight="20.0" prefWidth="120.0" />
-      <TextField fx:id="waehrung" layoutX="390.0" layoutY="220.0" prefHeight="20.0" prefWidth="120.0" />
-      <TextField fx:id="jahr" layoutX="390.0" layoutY="260.0" prefHeight="20.0" prefWidth="120.0" />
+      <LetterTextField fx:id="waehrung" layoutX="390.0" layoutY="220.0" prefHeight="20.0" prefWidth="120.0" />
+      <NumberTextField fx:id="jahr" layoutX="390.0" layoutY="260.0" prefHeight="20.0" prefWidth="120.0" />
       <TextField fx:id="inschriftKopf" layoutX="390.0" layoutY="300.0" prefHeight="20.0" prefWidth="120.0" />
       <TextField fx:id="inschriftZahl" layoutX="390.0" layoutY="340.0" prefHeight="20.0" prefWidth="120.0" />
       <ComboBox fx:id="zustand" layoutX="390.0" layoutY="380.0" prefHeight="26.0" prefWidth="120.0" promptText="Conservation" />
